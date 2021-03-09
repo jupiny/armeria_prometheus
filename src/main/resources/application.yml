@@ -1,0 +1,21 @@
+management:
+  server:
+    port: 8082
+  endpoints:
+#    metrics:
+#      enabled: false
+#    prometheus:
+#      enabled: false
+    web:
+      exposure:
+        include: health, info, prometheus
+#
+#  metrics:
+#    export:
+#      prometheus:
+#        enabled: true
+
+armeria:
+  ports:
+    - port: 8083
+      protocol: HTTP

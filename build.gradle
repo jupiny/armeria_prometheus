@@ -1,0 +1,44 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 3rd parties
+    // Armeria
+    implementation "com.linecorp.armeria:armeria:1.2.0" // Core
+    implementation "com.linecorp.armeria:armeria-spring-boot2-autoconfigure:1.2.0" // For Spring Boot 2 integration
+
+    // Micrometer
+    implementation "io.micrometer:micrometer-core" // Core
+    implementation "io.micrometer:micrometer-registry-prometheus" // For Prometheus
+
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
