@@ -29,7 +29,7 @@ public class ArmeriaServerConfiguration {
 
     @Bean
     public MeterIdPrefixFunction meterIdPrefixFunction() {
-        return MeterIdPrefixFunction.ofDefault("my.service");
+        return MeterIdPrefixFunction.ofDefault("my.server");
     }
 
     @Bean
@@ -37,7 +37,7 @@ public class ArmeriaServerConfiguration {
         return new MeterFilter() {
             @Override
             public MeterFilterReply accept(Id id) {
-                return id.getName().startsWith("my.service") ? MeterFilterReply.ACCEPT : MeterFilterReply.DENY;
+                return id.getName().startsWith("my.server") ? MeterFilterReply.ACCEPT : MeterFilterReply.DENY;
             }
         };
     }
