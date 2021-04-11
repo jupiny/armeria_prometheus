@@ -3,6 +3,7 @@ package com.example.armeria_prometheus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.linecorp.armeria.common.metric.MeterIdPrefixFunction;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
 import com.linecorp.armeria.spring.ArmeriaServerConfigurator;
 
@@ -19,6 +20,12 @@ public class ArmeriaServerConfiguration {
 
     @Bean
     public ArmeriaServerConfigurator serverConfigurator(MyAnnotatedService myService) {
-        return server -> server.annotatedService("/jupiny", myService);
+        return server -> server
+                .annotatedService("/jupiny", myService);
+    }
+
+    @Bean
+    public MeterIdPrefixFunction meterIdPrefixFunction() {
+        return MeterIdPrefixFunction.ofDefault("my.service");
     }
 }
