@@ -17,14 +17,15 @@ public class ArmeriaServerConfiguration {
 
     @Bean
     public ArmeriaServerConfigurator prometheusConfigurator(PrometheusMeterRegistry registry) {
-        return server -> server.service("/metrics",
-                                        new PrometheusExpositionService(registry.getPrometheusRegistry()));
+        return server -> server
+                .service("/metrics",
+                         new PrometheusExpositionService(registry.getPrometheusRegistry()));
     }
 
     @Bean
     public ArmeriaServerConfigurator serverConfigurator(MyAnnotatedService myService) {
         return server -> server
-                .annotatedService("/jupiny", myService);
+                .annotatedService("/", myService);
     }
 
     @Bean
@@ -37,7 +38,8 @@ public class ArmeriaServerConfiguration {
         return new MeterFilter() {
             @Override
             public MeterFilterReply accept(Id id) {
-                return id.getName().startsWith("my.server") ? MeterFilterReply.ACCEPT : MeterFilterReply.DENY;
+                return id.getName().startsWith("my.server") ?
+                       MeterFilterReply.ACCEPT : MeterFilterReply.DENY;
             }
         };
     }
