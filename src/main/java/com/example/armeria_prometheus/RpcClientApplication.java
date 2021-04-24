@@ -14,7 +14,14 @@ public class RpcClientApplication {
                 HelloServiceBlockingStub.class); // or HelloServiceFutureStub.class or HelloServiceStub.class
 
         HelloRequest request = HelloRequest.newBuilder().setName("Armerian World").build();
-        HelloReply reply = helloService.hello(request);
-        assert reply.getMessage().equals("Hello, Armerian World!");
+        for (int i = 0; i < 10; i++) {
+            try {
+                HelloReply reply = helloService.hello(request);
+                System.out.println(reply.getMessage());
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+        // assert reply.getMessage().equals("Hello, Armerian World!");
     }
 }
