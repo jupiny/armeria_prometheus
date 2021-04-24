@@ -1,5 +1,8 @@
 package com.example.armeria_prometheus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.armeria_prometheus.grpc.Hello.HelloReply;
 import com.example.armeria_prometheus.grpc.Hello.HelloRequest;
 import com.example.armeria_prometheus.grpc.HelloServiceGrpc.HelloServiceBlockingStub;
@@ -7,6 +10,8 @@ import com.example.armeria_prometheus.grpc.HelloServiceGrpc.HelloServiceBlocking
 import com.linecorp.armeria.client.Clients;
 
 public class RpcClientApplication {
+
+    private static final Logger logger = LoggerFactory.getLogger(RpcClientApplication.class);
 
     public static void main(String[] args) {
         HelloServiceBlockingStub helloService = Clients.newClient(
@@ -17,11 +22,10 @@ public class RpcClientApplication {
         for (int i = 0; i < 100; i++) {
             try {
                 HelloReply reply = helloService.hello(request);
-                System.out.println(reply.getMessage());
+                logger.info(reply.getMessage());
             } catch (Exception e) {
                 // ignore
             }
         }
-        // assert reply.getMessage().equals("Hello, Armerian World!");
     }
 }
