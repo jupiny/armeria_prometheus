@@ -24,7 +24,13 @@ public class ArmeriaPrometheusApplication {
                 .http(8083)
                 .meterRegistry(meterRegistry)
                 .annotatedService(new MyAnnotatedService(meterRegistry),
-                                  MetricCollectingService.newDecorator(MeterIdPrefixFunction.ofDefault("my.server")))
+                                  MetricCollectingService
+                                          .builder(MeterIdPrefixFunction.ofDefault("my.server"))
+                                          .successFunction((context, log) -> {
+                                              final int statusCode = log.responseHeaders().status().code();
+                                              return (statusCode >= 200 && statusCode < 400) || statusCode == 404;
+                                          })
+                                          .newDecorator())
                 .service(GrpcService.builder()
                                     .addService(new MyHelloService())
                                     .build(),

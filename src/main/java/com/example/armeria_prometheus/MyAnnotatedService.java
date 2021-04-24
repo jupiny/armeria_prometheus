@@ -3,6 +3,7 @@ package com.example.armeria_prometheus;
 import java.util.Random;
 
 import com.linecorp.armeria.common.HttpResponse;
+import com.linecorp.armeria.common.HttpStatus;
 import com.linecorp.armeria.server.annotation.Get;
 
 import io.micrometer.core.instrument.Counter;
@@ -20,10 +21,13 @@ public class MyAnnotatedService {
     @Get("/hello")
     public HttpResponse hello() {
         counter.increment();
-        int rand = RAND.nextInt(2);
+        int rand = RAND.nextInt(1000);
+        if (rand % 3 == 0) {
+            return HttpResponse.of(HttpStatus.NOT_FOUND);
+        }
         if (rand % 2 == 0) {
             return HttpResponse.of("world");
         }
-        return HttpResponse.ofFailure(new RuntimeException("error"));
+        return HttpResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -14,7 +14,7 @@ public class RpcClientApplication {
                 HelloServiceBlockingStub.class); // or HelloServiceFutureStub.class or HelloServiceStub.class
 
         HelloRequest request = HelloRequest.newBuilder().setName("Armerian World").build();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             try {
                 HelloReply reply = helloService.hello(request);
                 System.out.println(reply.getMessage());

@@ -15,7 +15,7 @@ public class MyHelloService extends HelloServiceGrpc.HelloServiceImplBase {
 
     @Override
     public void hello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        int rand = RAND.nextInt(2);
+        int rand = RAND.nextInt(1000);
         if (rand % 2 == 0) {
             HelloReply reply = HelloReply.newBuilder()
                                          .setMessage("Hello, " + request.getName() + '!')
