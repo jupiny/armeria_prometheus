@@ -1,7 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.16'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.3.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id 'idea'
+    id 'com.google.protobuf' version '0.8.16'
 }
 
 group = 'com.example'
@@ -20,7 +31,10 @@ repositories {
 
 dependencies {
     // Armeria
-    implementation "com.linecorp.armeria:armeria:1.2.0"
+    implementation "com.linecorp.armeria:armeria:1.6.0"
+
+    // Armeria gRPC
+    implementation "com.linecorp.armeria:armeria-grpc:1.6.0"
 
     // Prometheus
     implementation "io.micrometer:micrometer-registry-prometheus"
@@ -30,8 +44,33 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
 
 test {
     useJUnitPlatform()
+}
+
+protobuf {
+    // Configure the protoc executable.
+    protoc {
+        // Download from the repository.
+        artifact = 'com.google.protobuf:protoc:3.12.0'
+    }
+
+    // Locate the codegen plugins.
+    plugins {
+        // Locate a plugin with name 'grpc'.
+        grpc {
+            // Download from the repository.
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.36.1'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
 }

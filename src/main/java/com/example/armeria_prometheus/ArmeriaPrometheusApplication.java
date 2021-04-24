@@ -4,8 +4,10 @@ import java.util.concurrent.CompletableFuture;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.linecorp.armeria.common.grpc.GrpcMeterIdPrefixFunction;
 import com.linecorp.armeria.common.metric.MeterIdPrefixFunction;
 import com.linecorp.armeria.server.Server;
+import com.linecorp.armeria.server.grpc.GrpcService;
 import com.linecorp.armeria.server.metric.MetricCollectingService;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
 
@@ -21,9 +23,13 @@ public class ArmeriaPrometheusApplication {
                 .builder()
                 .http(8083)
                 .meterRegistry(meterRegistry)
-                .annotatedService(new MyAnnotatedService(meterRegistry))
-                .decorator(MetricCollectingService.newDecorator(MeterIdPrefixFunction.ofDefault("my.server")))
-                .service("/metrics", new PrometheusExpositionService(meterRegistry.getPrometheusRegistry()))
+                .annotatedService(new MyAnnotatedService(meterRegistry),
+                                  MetricCollectingService.newDecorator(MeterIdPrefixFunction.ofDefault("my.server")))
+                .service(GrpcService.builder()
+                                    .addService(new MyHelloService())
+                                    .build(),
+                         MetricCollectingService.newDecorator(GrpcMeterIdPrefixFunction.of("my.grpc")))
+                .service("/metrics", PrometheusExpositionService.of(meterRegistry.getPrometheusRegistry()))
                 .build();
 
         CompletableFuture<Void> future = server.start();
