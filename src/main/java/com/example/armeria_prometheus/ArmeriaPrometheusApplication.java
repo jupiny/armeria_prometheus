@@ -2,8 +2,6 @@ package com.example.armeria_prometheus;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import com.linecorp.armeria.common.grpc.GrpcMeterIdPrefixFunction;
 import com.linecorp.armeria.common.metric.MeterIdPrefixFunction;
 import com.linecorp.armeria.server.Server;
@@ -15,7 +13,6 @@ import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 
-@SpringBootApplication
 public class ArmeriaPrometheusApplication {
 
     public static void main(String[] args) {
