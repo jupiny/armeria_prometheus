@@ -25,7 +25,8 @@ public class ArmeriaPrometheusApplication {
                 .meterRegistry(meterRegistry)
                 .annotatedService(new MyAnnotatedService(meterRegistry),
                                   MetricCollectingService
-                                          .builder(MeterIdPrefixFunction.ofDefault("my.server"))
+                                          .builder(MeterIdPrefixFunction.ofDefault("my.server")
+                                                                        .andThen(new MyMeterIdPrefixFunction()))
                                           .successFunction((context, log) -> {
                                               final int statusCode = log.responseHeaders().status().code();
                                               return (statusCode >= 200 && statusCode < 400) || statusCode == 404;

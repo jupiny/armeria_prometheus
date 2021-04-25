@@ -5,6 +5,7 @@ import java.util.Random;
 import com.linecorp.armeria.common.HttpResponse;
 import com.linecorp.armeria.common.HttpStatus;
 import com.linecorp.armeria.server.annotation.Get;
+import com.linecorp.armeria.server.annotation.Param;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -18,15 +19,15 @@ public class MyAnnotatedService {
         counter = meterRegistry.counter("api.call.count");
     }
 
-    @Get("/hello")
-    public HttpResponse hello() {
+    @Get("/hello/:msg")
+    public HttpResponse hello(@Param("name") String msg) {
         counter.increment();
         int rand = RAND.nextInt(1000);
         if (rand % 3 == 0) {
             return HttpResponse.of(HttpStatus.NOT_FOUND);
         }
         if (rand % 2 == 0) {
-            return HttpResponse.of("world");
+            return HttpResponse.of(msg);
         }
         return HttpResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }

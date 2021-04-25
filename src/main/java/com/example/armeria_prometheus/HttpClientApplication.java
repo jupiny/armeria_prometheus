@@ -15,7 +15,7 @@ public class HttpClientApplication {
     public static void main(String[] args) {
         WebClient client = WebClient.of("http://localhost:8083/");
         for (int i = 0; i < 100; i++) {
-            AggregatedHttpResponse res = client.get("/hello").aggregate().join();
+            AggregatedHttpResponse res = client.get("/hello/armeria").aggregate().join();
             logger.info(res.content(StandardCharsets.UTF_8));
         }
     }
