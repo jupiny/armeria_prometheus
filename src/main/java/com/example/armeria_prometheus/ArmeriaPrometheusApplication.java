@@ -11,6 +11,7 @@ import com.linecorp.armeria.server.grpc.GrpcService;
 import com.linecorp.armeria.server.metric.MetricCollectingService;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
 
+import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 
@@ -19,6 +20,8 @@ public class ArmeriaPrometheusApplication {
 
     public static void main(String[] args) {
         PrometheusMeterRegistry meterRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        meterRegistry.config()
+                     .meterFilter(MeterFilter.denyNameStartsWith("armeria"));
         Server server = Server
                 .builder()
                 .http(8083)

@@ -20,7 +20,7 @@ public class MyAnnotatedService {
     }
 
     @Get("/hello/:msg")
-    public HttpResponse hello(@Param("name") String msg) {
+    public HttpResponse hello(@Param("msg") String msg) {
         counter.increment();
         int rand = RAND.nextInt(1000);
         if (rand % 3 == 0) {
